@@ -1,14 +1,9 @@
 from time import sleep
+from src.tabuleiro import Tabuleiro
 
 class Jogo:
     def __init__(self):
-        pass
-
-    def gerarTabuleiro(self):
-        pass
-
-    def exibirTabuleiro(self):
-        pass
+        self.tabuleiro = Tabuleiro()
 
     def verificaJogada(self):
         pass
@@ -44,4 +39,5 @@ class Jogo:
                 inputUsuario = ""
                 continue
 
+            self.tabuleiro.exibirTabuleiro()
             # print("L: {}, C: {}, N: {}".format(inputLinha, inputColuna, inputNumero))
