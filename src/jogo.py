@@ -4,6 +4,7 @@ from src.tabuleiro import Tabuleiro
 class Jogo:
     def __init__(self):
         self.tabuleiro = Tabuleiro()
+        self.dificuldade = 0
 
     def verificaJogada(self):
         pass
@@ -11,8 +12,31 @@ class Jogo:
     def fazerJogada(self):
         pass
 
+    def lerDificuldade(self):
+        while True:
+            try:
+                inputDificuldade = int(input("1 - Fácil (mais pistas)\n" \
+                "2 - Médio \n" \
+                "3 - Difícil \n" \
+                "4 - Especialista (menos pistas)\n\n" \
+                "Insira a dificuldade: "))
+            except ValueError:
+                print("\nEntrada inválida. Digite um número.\n")
+                sleep(1.5)
+                continue
+
+            if inputDificuldade not in range(1, 4):
+                print("\nEscolha um valor entre 1 e 4.\n")
+                sleep(1.5)
+                continue
+
+            return inputDificuldade
+
     def iniciarPartida(self):
         while True:
+
+            self.dificuldade = self.lerDificuldade()
+
             inputUsuario = str(input("Insira sua jogada (linha, coluna, número):\n"))
 
             # Validacao basica do input
