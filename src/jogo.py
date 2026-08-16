@@ -15,7 +15,7 @@ class Jogo:
         while True:
             inputUsuario = str(input("Insira sua jogada (linha, coluna, número):\n"))
 
-            # Validacao do input
+            # Validacao basica do input
             try:
                 valores = inputUsuario.split(",")
                 inputLinha = int(valores[0])
