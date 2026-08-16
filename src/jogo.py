@@ -32,10 +32,11 @@ class Jogo:
 
             return inputDificuldade
 
-    def iniciarPartida(self):
+    def lerJogada(self):
         while True:
-
-            self.dificuldade = self.lerDificuldade()
+            inputLinha = 0
+            inputColuna = 0
+            inputNumero = 0
 
             inputUsuario = str(input("Insira sua jogada (linha, coluna, número):\n"))
 
@@ -63,5 +64,14 @@ class Jogo:
                 inputUsuario = ""
                 continue
 
+            return inputLinha, inputColuna, inputNumero
+
+    def iniciarPartida(self):
+        while True:
+            self.dificuldade = self.lerDificuldade()
+
             self.tabuleiro.renderizar()
-            # print("L: {}, C: {}, N: {}".format(inputLinha, inputColuna, inputNumero))
+
+            linha, coluna, numero = self.lerJogada()
+
+        # print("L: {}, C: {}, N: {}".format(inputLinha, inputColuna, inputNumero))
