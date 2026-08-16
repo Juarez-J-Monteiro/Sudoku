@@ -9,7 +9,7 @@ class Tabuleiro:
         gradeTemporaria = [[self.VAZIO for _ in range(self.tamanho)] for _ in range(self.tamanho)]
         return gradeTemporaria
 
-    def exibirTabuleiro(self):
+    def renderizar(self):
         print('\n')
 
         linhasTexto = []

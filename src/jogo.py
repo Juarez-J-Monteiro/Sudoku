@@ -39,5 +39,5 @@ class Jogo:
                 inputUsuario = ""
                 continue
 
-            self.tabuleiro.exibirTabuleiro()
+            self.tabuleiro.renderizar()
             # print("L: {}, C: {}, N: {}".format(inputLinha, inputColuna, inputNumero))
