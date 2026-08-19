@@ -6,6 +6,7 @@ class Tabuleiro:
     def __init__(self):
         self.tamanho = 9
         self.grade = self.gerarTabuleiro()
+        self.posOcultadas = None
 
     def gerarTabuleiro(self):
         tamanho = self.tamanho
@@ -46,7 +47,7 @@ class Tabuleiro:
                 return True
 
             # Calcula qual será a próxima célula a ser visitada.
-            # Se chegou na última coluna, avança pra próxima linha e volta a coluna pro início;
+            # Se chegou na última coluna, avança pra próxima linha e volta a coluna pro início,
             # caso contrário, apenas avança uma coluna na mesma linha.
             if coluna == tamanho - 1:
                 proxima_linha = linha + 1
@@ -84,6 +85,51 @@ class Tabuleiro:
 
         preencher()
         return grade
+
+    def ocultarCelulas(self, dificuldade):
+        # Lista das dificuldades com seus limites mínimos e máximos de ocultações.
+        dificuldades = {
+            1: (41, 45), # 36-40 pistas
+            2: (46, 51), # 30-35 pistas
+            3: (52, 57), # 24-29 pistas
+            4: (58, 64)  # 17-23 pistas
+        }
+
+        # Caso a dificuldade seja inválida mesmo depois das validações no input, assume a dificuldade
+        # fácil como padrão e gera um aviso.
+        if dificuldade not in dificuldades:
+            print("Aviso: dificuldade '{}' inválida, usando padrão (fácil).".format(dificuldade))
+            dificuldade = 1
+
+        # Atribui os valores mínimos e máximos com base na dificuldade escolhida
+        minimo, maximo = dificuldades[dificuldade]
+        # Gera o número de ocultações com base nos limites
+        quantidade = random.randint(minimo, maximo)
+
+        posicoes = []
+        # Salva as posições ocultadas para uso futuro de validação
+        self.posOcultadas = posicoes
+
+        # Laço que percorre a quantidade de células a serem ocultadas
+        for i in range(quantidade):
+            while True:
+
+                # Gera uma coordenada aleatória
+                x = random.randint(0, 8)
+                y = random.randint(0, 8)
+
+                # Verifica se a coordenada gerada já existe na lista
+                if (x, y) not in posicoes:
+
+                    # Se não existir, adiciona a coordenada gerada na lista
+                    posicoes.append((x, y))
+                    break # Para o while e avança o laço for
+
+        # Percorre a lista das coordenadas geradas e aplica a ocultação no tabuleiro
+        for i in range(len(posicoes)):
+            x = posicoes[i][0]
+            y = posicoes[i][1]
+            self.grade[x][y] = '.'
 
     def renderizar(self):
         print('\n')

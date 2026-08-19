@@ -70,7 +70,10 @@ class Jogo:
         while True:
             self.dificuldade = self.lerDificuldade()
 
+            self.tabuleiro.ocultarCelulas(self.dificuldade)
+
             self.tabuleiro.renderizar()
+
 
             linha, coluna, numero = self.lerJogada()
 
