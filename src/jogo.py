@@ -5,12 +5,40 @@ class Jogo:
     def __init__(self):
         self.tabuleiro = Tabuleiro()
         self.dificuldade = 0
+        self.contagemErros = 0
 
     def verificaJogada(self):
         pass
     
-    def fazerJogada(self):
-        pass
+    def fazerJogada(self, linha, coluna, numero):
+        """Coloca um número numa célula editável, validando as regras e permite 
+        substituir jogadas anteriores."""
+
+        pos = (linha - 1, coluna - 1)
+
+        # Verifica se a posição da jogada é de uma pista
+        if pos not in self.tabuleiro.posOcultadas:
+            print("Essa célula não pode ser alterada!")
+            return
+
+        # Salva o valor antigo da célula
+        valorAntigo = self.tabuleiro.grade[pos[0]][pos[1]]
+
+        # Limpa a célula antes de validar
+        self.tabuleiro.grade[pos[0]][pos[1]] = self.tabuleiro.VAZIO
+
+        # Verifica se o novo valor na célula é valida segundo as regras.
+        if self.tabuleiro.valido(self.tabuleiro.grade, pos[0], pos[1], numero):
+            # Atribui definitivamente o novo valor na célula se for válido.
+            self.tabuleiro.grade[pos[0]][pos[1]] = numero
+        else:
+            # Desfaz a jogada se for inválida.
+            self.tabuleiro.grade[pos[0]][pos[1]] = valorAntigo
+
+            # Contabiliza o erro.
+            self.contagemErros += 1
+            print("\nJogada inválida!")
+            sleep(1.5)
 
     def lerDificuldade(self):
         while True:
@@ -67,14 +95,14 @@ class Jogo:
             return inputLinha, inputColuna, inputNumero
 
     def iniciarPartida(self):
+        self.dificuldade = self.lerDificuldade()
+        self.tabuleiro.ocultarCelulas(self.dificuldade)
+
         while True:
-            self.dificuldade = self.lerDificuldade()
-
-            self.tabuleiro.ocultarCelulas(self.dificuldade)
-
             self.tabuleiro.renderizar()
 
-
             linha, coluna, numero = self.lerJogada()
+
+            self.fazerJogada(linha, coluna, numero)
 
         # print("L: {}, C: {}, N: {}".format(inputLinha, inputColuna, inputNumero))
