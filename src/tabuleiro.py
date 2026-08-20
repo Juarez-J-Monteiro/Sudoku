@@ -5,7 +5,10 @@ class Tabuleiro:
 
     def __init__(self):
         self.tamanho = 9
+
+        # Gera automáticamente um tabuleiro sudoko completo e válido
         self.grade = self.gerarTabuleiro()
+
         self.posOcultadas = None
 
     def valido(self, grade, linha: int, coluna, valor):
@@ -99,6 +102,9 @@ class Tabuleiro:
         return grade
 
     def ocultarCelulas(self, dificuldade):
+        """Oculta células do tabuleiro completo para gerar um tabuleiro jogável,
+        de acordo com o nível de dificuldade definido."""
+
         # Lista das dificuldades com seus limites mínimos e máximos de ocultações.
         dificuldades = {
             1: (41, 45), # 36-40 pistas
@@ -144,31 +150,32 @@ class Tabuleiro:
             self.grade[x][y] = '.'
 
     def renderizar(self):
+        """Formata o tabuleiro de forma visual ao usuário, percorrendo todas as células e linhas da 
+        grade original adicionando as delimitações do tabuleiro onde necessário. """
+
         print('\n')
-
         linhasTexto = []
-
-        # Os lacos abaixo percorrem todas as células e linhas da grade original,  
-        # adicionando as delimitacoes do tabuleiro onde necessário
 
         # Laco que percorre as linhas da grade original
         for i, linha in enumerate(self.grade):
 
-            # Condicao para delimitacao, garantindo separacao correta
+            # Condição para delimitação, garantindo separação horizontal correta
             if i != 0 and i % 3 == 0: 
-                # Adiciona a delimitacao horizontal do tabuleiro
+                # Insere a delimitação horizontal do tabuleiro
                 linhasTexto.append("-" * 21) 
 
-            celulas = [] # lista temporaria de celulas
+            # Lista temporária de células
+            celulas = [] 
+            
             # Laço que percorre as células de cada linha
             for j, valor in enumerate(linha):
-                # Condicao para delimitacao, garantindo separacao correta
+                # Condição para delimitação, garantindo separação vertical correta
                 if j != 0 and j % 3 == 0:
-                    # Adiciona a delimitacao vertical do tabuleiro
+                    # Insere a delimitação vertical do tabuleiro
                     celulas.append("|") 
                 celulas.append(str(valor))
 
-            # Junta as células já formatados com as delimatacoes verticais do tabuleiro  
+            # Junta as células já formatados com as delimatações verticais do tabuleiro  
             # na matriz que será impressa
             linhasTexto.append(' '.join(celulas)) 
         
