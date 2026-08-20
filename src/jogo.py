@@ -2,11 +2,21 @@ from time import sleep
 from src.tabuleiro import Tabuleiro
 
 class Jogo:
+    LIMITE_ERROS = 3
+
     def __init__(self):
         self.tabuleiro = Tabuleiro()
         self.dificuldade = 0
         self.contagemErros = 0
 
+    def jogoTerminou(self):
+        """Verifica se alguma condição de fim de jogo foi atingida"""
+
+        if self.contagemErros >= self.LIMITE_ERROS:
+            return True, "LimiteDeErroAtingido"
+        
+        return False, None
+    
     def verificaJogada(self):
         pass
     
@@ -104,5 +114,11 @@ class Jogo:
             linha, coluna, numero = self.lerJogada()
 
             self.fazerJogada(linha, coluna, numero)
+
+            terminou, resultado = self.jogoTerminou()
+
+            if terminou:
+                print(resultado)
+                break
 
         # print("L: {}, C: {}, N: {}".format(inputLinha, inputColuna, inputNumero))
