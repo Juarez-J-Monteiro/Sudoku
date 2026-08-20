@@ -53,7 +53,7 @@ class Jogo:
                 sleep(1.5)
                 continue
 
-            if inputDificuldade not in range(1, 4):
+            if inputDificuldade not in range(1, 5):
                 print("\nEscolha um valor entre 1 e 4.\n")
                 sleep(1.5)
                 continue
