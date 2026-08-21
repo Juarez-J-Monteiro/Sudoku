@@ -14,6 +14,8 @@ class Jogo:
 
         if self.contagemErros >= self.LIMITE_ERROS:
             return True, "LimiteDeErroAtingido"
+        if self.tabuleiro.tabuleiroCompleto():
+            return True, "TabuleiroCompleto"
         
         return False, None
     
