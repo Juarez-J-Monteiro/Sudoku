@@ -172,7 +172,7 @@ class Tabuleiro:
             # Condição para delimitação, garantindo separação horizontal correta
             if i != 0 and i % 3 == 0: 
                 # Insere a delimitação horizontal do tabuleiro
-                linhasTexto.append("-" * 21) 
+                linhasTexto.append("\033[30;47m-\033[0m" * 21) 
 
             # Lista temporária de células
             celulas = [] 
@@ -182,11 +182,18 @@ class Tabuleiro:
                 # Condição para delimitação, garantindo separação vertical correta
                 if j != 0 and j % 3 == 0:
                     # Insere a delimitação vertical do tabuleiro
-                    celulas.append("|") 
-                celulas.append(str(valor))
+                    celulas.append("\033[30;47m|\033[0m")
+
+                # Condição para colorir corretamente a célula    
+                if (i, j) in self.posOcultadas and valor != ".":
+                    # Se for um valor colocado corretamente pelo usuário: azul
+                    celulas.append("\033[34;47m"+str(valor)+"\033[0m")
+                else:
+                    # Se não: preto.
+                    celulas.append("\033[30;47m"+str(valor)+"\033[0m")
 
             # Junta as células já formatados com as delimatações verticais do tabuleiro  
             # na matriz que será impressa
-            linhasTexto.append(' '.join(celulas)) 
+            linhasTexto.append('\033[30;47m \033[0m'.join(celulas)) 
         
         print('\n'.join(linhasTexto)) # imprime o tabuleiro totalmente formatado
