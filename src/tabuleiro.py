@@ -11,6 +11,16 @@ class Tabuleiro:
 
         self.posOcultadas = None
 
+    def tabuleiroCompleto(self):
+        """Verifica se o tabuleiro está totalmente preenchido."""
+
+        for linha in range(self.tamanho):
+            for coluna in range(self.tamanho):
+                if self.grade[linha][coluna] == ".":
+                    return False
+
+        return True
+    
     def valido(self, grade, linha: int, coluna, valor):
         """Verifica se um número é válido em (x,y) posição. 
         (True == válido, falso == inválido)"""
