@@ -9,6 +9,14 @@ class Jogo:
         self.dificuldade = 0
         self.contagemErros = 0
 
+    def exibirResultado(self, resultado):
+        if resultado == "LimiteDeErroAtingido":
+            print("\nLimite de erros ({}/{}) atingido.".format(self.contagemErros, self.LIMITE_ERROS))
+            print("Você perdeu!")
+        elif resultado == "TabuleiroCompleto":
+            print("\nO tabuleiro foi completado.")
+            print("Você ganhou!")
+
     def jogoTerminou(self):
         """Verifica se alguma condição de fim de jogo foi atingida"""
 
@@ -30,7 +38,8 @@ class Jogo:
 
         # Verifica se a posição da jogada é de uma pista
         if pos not in self.tabuleiro.posOcultadas:
-            print("Essa célula não pode ser alterada!")
+            print("\nEssa célula não pode ser alterada!")
+            sleep(1.5)
             return
 
         # Salva o valor antigo da célula
@@ -113,6 +122,8 @@ class Jogo:
         while True:
             self.tabuleiro.renderizar()
 
+            print("{}/{} erros".format(self.contagemErros, self.LIMITE_ERROS))
+
             linha, coluna, numero = self.lerJogada()
 
             self.fazerJogada(linha, coluna, numero)
@@ -120,7 +131,7 @@ class Jogo:
             terminou, resultado = self.jogoTerminou()
 
             if terminou:
-                print(resultado)
+                self.exibirResultado(resultado)
                 break
 
         # print("L: {}, C: {}, N: {}".format(inputLinha, inputColuna, inputNumero))
