@@ -11,6 +11,9 @@ class Tabuleiro:
 
         self.posOcultadas = None
 
+        # Dicionário que armazena coordenadas e valores colocados erroneamente
+        self.posNumErrado = {}
+
     def tabuleiroCompleto(self):
         """Verifica se o tabuleiro está totalmente preenchido."""
 
@@ -184,8 +187,11 @@ class Tabuleiro:
                     # Insere a delimitação vertical do tabuleiro
                     celulas.append("\033[30;47m|\033[0m")
 
-                # Condição para colorir corretamente a célula    
-                if (i, j) in self.posOcultadas and valor != ".":
+                # Condições para colorir corretamente a célula
+                if (i, j) in self.posNumErrado:
+                    # Verifica se houve tentativa de posicionamento incorreto na célula e colore de vermelho
+                    celulas.append("\033[31;47m"+str(self.posNumErrado.get((i, j)))+"\033[0m")
+                elif (i, j) in self.posOcultadas and valor != ".":
                     # Se for um valor colocado corretamente pelo usuário: azul
                     celulas.append("\033[34;47m"+str(valor)+"\033[0m")
                 else:

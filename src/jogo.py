@@ -48,11 +48,19 @@ class Jogo:
         # Limpa a célula antes de validar
         self.tabuleiro.grade[pos[0]][pos[1]] = self.tabuleiro.VAZIO
 
-        # Verifica se o novo valor na célula é valida segundo as regras.
+        # Verifica se o novo valor na célula é valido segundo as regras.
         if self.tabuleiro.valido(self.tabuleiro.grade, pos[0], pos[1], numero):
             # Atribui definitivamente o novo valor na célula se for válido.
             self.tabuleiro.grade[pos[0]][pos[1]] = numero
+
+            # Condição que verifica se houve erro de jogada na célula antes.
+            if (pos[0],pos[1]) in self.tabuleiro.posNumErrado:
+                # Deleta o erro e evita preencher incorretamente em `self.tabuleiro.renderizar`.
+                del self.tabuleiro.posNumErrado[pos]
         else:
+            # Adiciona/substitui o valor errado num dicionário para renderizar depois.
+            self.tabuleiro.posNumErrado[pos] = numero
+
             # Desfaz a jogada se for inválida.
             self.tabuleiro.grade[pos[0]][pos[1]] = valorAntigo
 
