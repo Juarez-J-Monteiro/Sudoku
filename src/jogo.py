@@ -3,13 +3,19 @@ from src.tabuleiro import Tabuleiro
 
 class Jogo:
     LIMITE_ERROS = 3
+    TEMPO_MSG = 1.5
 
     def __init__(self):
+
+        # Inicializa a classe do tabuleiro
         self.tabuleiro = Tabuleiro()
+
         self.dificuldade = 0
         self.contagemErros = 0
 
     def exibirResultado(self, resultado):
+        """Exibe a mensagem final de acordo com o resultado. """
+        
         if resultado == "LimiteDeErroAtingido":
             print("\nLimite de erros ({}/{}) atingido.".format(self.contagemErros, self.LIMITE_ERROS))
             print("Você perdeu!")
@@ -27,28 +33,27 @@ class Jogo:
         
         return False, None
     
-    def verificaJogada(self):
-        pass
-    
     def fazerJogada(self, linha, coluna, numero):
         """Coloca um número numa célula editável, validando as regras e permite 
         substituir jogadas anteriores."""
 
+        # Corrige o intervalo digitado pelo usuário, adequando ao índice
+        # usado pelo programa.
         pos = (linha - 1, coluna - 1)
 
         # Verifica se a posição da jogada é de uma pista
         if pos not in self.tabuleiro.posOcultadas:
             print("\nEssa célula não pode ser alterada!")
-            sleep(1.5)
+            sleep(self.TEMPO_MSG)
             return
 
-        # Salva o valor antigo da célula
+        # Salva o valor antigo da célula.
         valorAntigo = self.tabuleiro.grade[pos[0]][pos[1]]
 
-        # Limpa a célula antes de validar
+        # Limpa a célula antes de validar.
         self.tabuleiro.grade[pos[0]][pos[1]] = self.tabuleiro.VAZIO
 
-        # Verifica se o novo valor na célula é valido segundo as regras.
+        # Verifica se o novo valor na célula é válido segundo as regras.
         if self.tabuleiro.valido(self.tabuleiro.grade, pos[0], pos[1], numero):
             # Atribui definitivamente o novo valor na célula se for válido.
             self.tabuleiro.grade[pos[0]][pos[1]] = numero
@@ -67,44 +72,66 @@ class Jogo:
             # Contabiliza o erro.
             self.contagemErros += 1
             print("\nJogada inválida!")
-            sleep(1.5)
+            sleep(self.TEMPO_MSG)
 
     def lerDificuldade(self):
+        """Lê a dificuldade escolhida, validando o input inserido. """
+
+        # Fica em loop enquanto uma dificuldade válida não for 
+        # digitada, ou o programa encerrado.
         while True:
+
+            # Validação básica do input
             try:
+                # Lê e armazena a dificuldade desejada.
                 inputDificuldade = int(input("1 - Fácil (mais pistas)\n" \
                 "2 - Médio \n" \
                 "3 - Difícil \n" \
                 "4 - Especialista (menos pistas)\n\n" \
                 "Insira a dificuldade: "))
             except ValueError:
+                # Trata valores que não sejam números.
                 print("\nEntrada inválida. Digite um número.\n")
-                sleep(1.5)
+                sleep(self.TEMPO_MSG)
+                
+                # Repete o loop.
                 continue
 
+            # Trata valores fora do intervalo de dificuldades.
             if inputDificuldade not in range(1, 5):
                 print("\nEscolha um valor entre 1 e 4.\n")
-                sleep(1.5)
+                sleep(self.TEMPO_MSG)
+
+                # Repete o loop.
                 continue
 
+            # Retorna a dificuldade escolhida.
             return inputDificuldade
 
     def lerJogada(self):
+        """Lê a jogada inserida, validando o input digitado. """
+
+        # Fica em loop enquanto o input da jogada não for 
+        # digitado corretamente, ou o programa encerrado.
         while True:
             inputLinha = 0
             inputColuna = 0
             inputNumero = 0
 
+            # Lê e armazena a dificuldade desejada.
             inputUsuario = str(input("Insira sua jogada (linha, coluna, número):\n"))
 
-            # Validacao basica do input
+            # Validação básica do input.
             try:
+                # Sepra os valores por ",".
                 valores = inputUsuario.split(",")
+
+                # Armazena cada um em sua respectiva variável.
                 inputLinha = int(valores[0])
                 inputColuna = int(valores[1])
                 inputNumero = int(valores[2])
 
-                # Validacao do intervalo inserido, avança o laço caso esteja fora do intervalo
+                # Validação do intervalo inserido, avança o laço (repete a msg) caso esteja fora do intervalo
                 if not (1 <= inputLinha <= 9):
                     print("\n[Erro]: A LINHA escolhida ({}) nao existe. Escolha de 1 a 9.\n".format(inputLinha))
                     continue
@@ -119,27 +146,45 @@ class Jogo:
             except Exception:
                 print("\n[Erro] Entrada inválida: '{}'\n".format(inputUsuario))
                 inputUsuario = ""
+
+                # Repete o loop.
                 continue
 
+            # Retorna os valores escolhidos pelo usuário separadamente.
             return inputLinha, inputColuna, inputNumero
 
     def iniciarPartida(self):
+        """Conduz o fluxo da partida, pede a dificuldade, gera o tabuleiro
+        jogável e executa o loop de jogadas até que o jogo termine."""
+
+        # Lê e armazena a dificuldade.
         self.dificuldade = self.lerDificuldade()
+
+        # Oculta as células conforme a dificuldade escolhida.
         self.tabuleiro.ocultarCelulas(self.dificuldade)
 
         while True:
+
+            # Exibe o tabuleiro para o usuário.
             self.tabuleiro.renderizar()
 
+            # Exibe a contagem de erros cometidos e o limite.
             print("{}/{} erros".format(self.contagemErros, self.LIMITE_ERROS))
 
+            # Lê e armazena as coordenadas e número escolhido.
             linha, coluna, numero = self.lerJogada()
 
+            # Realiza a jogada com as coordenadas e o número escolhidos.
             self.fazerJogada(linha, coluna, numero)
 
+            # Verifica se alguma condição de término foi atingida
+            # e armazena essas condições. 
             terminou, resultado = self.jogoTerminou()
 
+            # Condição que verifica se o jogo terminou.
             if terminou:
+                # Se verdadeiro, exibe a mensagem correspondente de término
                 self.exibirResultado(resultado)
-                break
 
-        # print("L: {}, C: {}, N: {}".format(inputLinha, inputColuna, inputNumero))
+                # Finaliza a partida
+                break

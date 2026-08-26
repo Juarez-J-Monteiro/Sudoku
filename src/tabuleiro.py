@@ -6,22 +6,26 @@ class Tabuleiro:
     def __init__(self):
         self.tamanho = 9
 
-        # Gera automáticamente um tabuleiro sudoko completo e válido
+        # Gera automaticamente um tabuleiro sudoko completo e válido
         self.grade = self.gerarTabuleiro()
 
-        self.posOcultadas = None
+        # Lista que armazena as posições ocultadas
+        self.posOcultadas = list()
 
         # Dicionário que armazena coordenadas e valores colocados erroneamente
-        self.posNumErrado = {}
+        self.posNumErrado = dict()
 
     def tabuleiroCompleto(self):
         """Verifica se o tabuleiro está totalmente preenchido."""
 
+        # Percorre célula por célula
         for linha in range(self.tamanho):
             for coluna in range(self.tamanho):
+                # Se encontrar um espaço vazio, retorna falso
                 if self.grade[linha][coluna] == ".":
                     return False
-
+                
+        # Se nenhum espaço vazio for encontrado, retorna verdadeiro
         return True
     
     def valido(self, grade, linha: int, coluna, valor):
@@ -57,6 +61,7 @@ class Tabuleiro:
         terminar a última coluna, passa para a próxima linha (validando cada número)."""
         
         tamanho = self.tamanho
+
         # Caso base da recursão: quando a linha ultrapassa o índice máximo válido
         # (linha 9, onde as linhas vão de 0 a 8), significa
         # que todas as células foram preenchidas com sucesso.
@@ -82,11 +87,11 @@ class Tabuleiro:
         for valor in valores:
             # Verifica se ele é válido (não repete na linha, coluna ou bloco).
             if self.valido(grade, linha, coluna, valor):
-                # Ao encontrar um valor válido, ele o fixa na célula e chama preencher() para a
+                # Quando o valor é válido, ele é fixado na célula e chama preencher() para a
                 # próxima posição, funciona como se fosse um checkpoint: se o resto do tabuleiro 
                 # puder ser resolvido a partir daqui, a função retorna verdadeiro e a solução 
                 # se propaga.
-                grade[linha][coluna] = valor
+                grade[linha][coluna] = valor # Fixa o valor
 
                 # Chama a si mesmo tentando preencher a nova célula
                 if self.preencher(grade, proxima_linha, proxima_coluna):
@@ -98,7 +103,7 @@ class Tabuleiro:
                 # sem precisar reiniciar as células anteriores.
                 grade[linha][coluna] = self.VAZIO
 
-        return False
+        return False # Só chega aqui se todos os valores dessa célula falharam.
         
     def gerarTabuleiro(self):
         """Gera o tabuleiro inicial válido"""
@@ -138,8 +143,6 @@ class Tabuleiro:
         quantidade = random.randint(minimo, maximo)
 
         posicoes = []
-        # Salva as posições ocultadas para uso futuro de validação
-        self.posOcultadas = posicoes
 
         # Laço que percorre a quantidade de células a serem ocultadas
         for i in range(quantidade):
@@ -156,6 +159,9 @@ class Tabuleiro:
                     posicoes.append((x, y))
                     break # Para o while e avança o laço for
 
+        # Salva as posições ocultadas para validações futuras
+        self.posOcultadas = posicoes
+        
         # Percorre a lista das coordenadas geradas e aplica a ocultação no tabuleiro
         for i in range(len(posicoes)):
             x = posicoes[i][0]
@@ -202,4 +208,4 @@ class Tabuleiro:
             # na matriz que será impressa
             linhasTexto.append('\033[30;47m \033[0m'.join(celulas)) 
         
-        print('\n'.join(linhasTexto)) # imprime o tabuleiro totalmente formatado
+        print('\n'.join(linhasTexto)) # Imprime o tabuleiro totalmente formatado

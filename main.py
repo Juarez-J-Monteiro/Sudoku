@@ -18,8 +18,8 @@ def perguntarJogarNovamente():
             print("Resposta inválida! Digite `s` para SIM ou `n` para NÃO!")
 
 def main():
-    """Controla a "vida" do programa, inciando partidas quando optado pelo usuário. Inicia automaticamente
-    a primeira partida do programa"""
+    """Controla a "vida" do programa, iniciando partidas quando optado pelo usuário. Inicia automaticamente
+    a partida na primeira execução do programa"""
 
     jogarNovamente = True
 
